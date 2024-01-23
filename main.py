@@ -5,7 +5,7 @@ from string import ascii_uppercase
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hjhjsdahhds"
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='gevent')
 
 rooms = {}
 
@@ -75,7 +75,7 @@ def message(data):
     }
     send(content, to=room)
     rooms[room]["messages"].append(content)
-    #print(f"{session.get('name')} said: {data['data']}")
+    print(f"{session.get('name')} said: {data['data']}")
 
 @socketio.on("connect")
 def connect(auth):
@@ -107,4 +107,4 @@ def disconnect():
     print(f"{name} has left the room {room}")
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, port=5000)
